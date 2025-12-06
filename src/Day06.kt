@@ -1,6 +1,3 @@
-import kotlin.collections.get
-import kotlin.text.get
-
 fun main() {
 
     data class InputD6(val numbers: List<List<Int>>, val operations: List<String>)
