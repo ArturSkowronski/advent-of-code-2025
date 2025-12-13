@@ -1,8 +1,3 @@
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
-
 fun main() {
 
     fun parse(input: List<String>): Map<String, List<String>> {
@@ -31,7 +26,31 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        return 0L
+        val graph = parse(input)
+
+        val state = mutableMapOf<Pair<String, Int>, Long>()
+
+        fun countPaths(node: String, visited: Int): Long {
+            val newVisited = when (node) {
+                "dac" -> visited or 1
+                "fft" -> visited or 2
+                else -> visited
+            }
+
+            if (node == "out") {
+                return if (newVisited == 3) 1L else 0L
+            }
+            if (node !in graph) return 0L
+
+            val key = node to newVisited
+            state[key]?.let { return it }
+
+            val count = graph[node]!!.sumOf { countPaths(it, newVisited) }
+            state[key] = count
+            return count
+        }
+
+        return countPaths("svr", 0)
     }
 
 //    part1(readInput("Day11_test")).println()
